@@ -36,7 +36,8 @@ classdef GridCell < dynamicprops
             GC.pt(index + 5*(GC.w * GC.h)) = flux;
         end
 
-        function [Pop, Suc, Exposed, Infected, Recovered, flux] = getValues(GC, coord)
+        % population, Succeptible, exposed, Infected, Recovered, Flux
+        function z = getValues(GC, coord)
             
             index = sub2ind([GC.h, GC.w, 6], coord(1), coord(2), 1);
             
@@ -46,6 +47,7 @@ classdef GridCell < dynamicprops
             Infected = GC.pt(index + 3*(GC.w * GC.h));
             Recovered = GC.pt(index + 4*(GC.w * GC.h));
             flux = GC.pt(index + 5*(GC.w * GC.h));
+            z = [Pop, Suc, Exposed, Infected, Recovered, flux];
         end
        
         

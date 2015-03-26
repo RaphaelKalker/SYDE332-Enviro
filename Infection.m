@@ -10,18 +10,18 @@ classdef Infection
 %         R0 = 0;
         E0 = .1;
         t0 = 0;
-        tf = 100;
+        tf = 5;
     end
     
     methods (Static)
-        function ode = plotODE45(S0, I0, R0)
+        function ode = plotODE45(S0, E0, I0, R0)
 %             a = Infection.a; 
 %             b = Infection.b; S0 = Infection.S0
             [T,Y] = ode45(@solve_SIR, [Infection.t0 Infection.tf], [S0 I0 R0]);
 
             plot(T,Y(:,1),T,Y(:,2),T,Y(:,3));
             legend('Susceptible','Infected','Recovered');
-            ode = [Y(end,1), Y(end,2), Y(end,3)];
+            ode = [Y(end,1), 0, Y(end,2), Y(end,3)];
         end
     end
     
