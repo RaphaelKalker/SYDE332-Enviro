@@ -27,7 +27,7 @@ end
 % y(2) = I
 % y(3) = R
 function f = solve_SIR(t,y)
-    a = Infect.a; b = Infect.b;
+    a = Infection.a; b = Infection.b;
     f = zeros(3,1);
     f(1) = -a*y(1)*y(2);
     f(2) = a*y(1)*y(2)-b*y(2);
