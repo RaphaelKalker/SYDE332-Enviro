@@ -8,14 +8,12 @@ for j = 1:GRID.w
     end
 end
 
-
-
 %update all of the SIR models with the ODE45 solver
 for j = 1:GRID.w
     for i = 1:GRID.h
         
         vals = GRID.getValues([i,j]);
-        A = Infection.plotODE45(vals(2), vals(3), vals(4), vals(5));
+        A = Infection.getFinalValues(vals(2), vals(3), vals(4), vals(5));
         vals(2) = A(1);
         vals(3) = A(2);
         vals(4) = A(3);
@@ -23,4 +21,7 @@ for j = 1:GRID.w
         GRID.setValues([i,j], vals(2), vals(3), vals(4), vals(5), vals(6));
     end
 end
-disp('MAKING IT RAIN');
+
+%Test swap cells function
+NewCs = SEIR.swapCells([1,2,3,4,5,6]', [1,2,3,4,5,6]')
+
