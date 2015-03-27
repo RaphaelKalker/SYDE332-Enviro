@@ -49,8 +49,3 @@ for i = 1:GRID.h
         end
     end
 end
-
-
-%Test swap cells function
-NewCs = SEIR.swapCells([1,2,3,4,5,6]', [1,2,3,4,5,6]')
-
