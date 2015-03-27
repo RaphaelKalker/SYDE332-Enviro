@@ -1,6 +1,10 @@
 classdef GridCell < dynamicprops
-    %GRIDCELL Summary of this class goes here
-    %   Detailed explanation goes here
+    %             pop = c(1);
+    %             S   = c(2);
+    %             E   = c(3);
+    %             I   = c(4);
+    %             R   = c(5);
+    %             flux = c(6);
     
     properties
         population = 300;
@@ -13,7 +17,6 @@ classdef GridCell < dynamicprops
         pt = [];
         w = 0;
         h = 0;
-        
     end
     
     methods
@@ -39,6 +42,19 @@ classdef GridCell < dynamicprops
         % population, Succeptible, exposed, Infected, Recovered, Flux
         function z = getValues(GC, coord)
             
+            %check cordinates incase we are outside of the grid for flux
+            %transitions
+            % i -> rows (height), j -> cols (width)
+            if (coord(1) > GC.h || coord(1) < 0)
+                z = [];
+                return;
+            end
+            
+            if (coord(2) > GC.w || coord(2) < 0)
+                z = [];
+                return;
+            end
+            
             index = sub2ind([GC.h, GC.w, 6], coord(1), coord(2), 1);
             
             Pop = GC.pt(index);
@@ -49,9 +65,61 @@ classdef GridCell < dynamicprops
             flux = GC.pt(index + 5*(GC.w * GC.h));
             z = [Pop, Suc, Exposed, Infected, Recovered, flux];
         end
-       
         
+        
+        
+        function GC = swapCells(GC, c1,c2, position)
+
+            %Determine diffusion of S,E,I,R individuals
+            r1 = randsample(1:4, c1(6), true, [c1(2)/c1(1), c1(3)/c1(1), c1(4)/c1(1), c1(5)/c1(1)]);
+            r2 = randsample(1:4, c2(6), true, [c2(2)/c2(1), c2(3)/c2(1), c2(4)/c2(1), c2(5)/c2(1)]);
+            rsamples = [r1' r2'];
+
+            SEIR_vals = zeros(4,2);
+
+            %Each cell
+            for i = 1:2
+                %Each random sample row
+                for j=1:4
+                    SEIR_vals(j,i) = sum(rsamples(:,i) == j);
+                end
+            end
+
+            %Out's
+            c1(2:5) = c1(2:5) - SEIR_vals(:,1);
+            c2(2:5) = c2(2:5) - SEIR_vals(:,2);
+
+            %In's
+            c1(2:5) = c1(2:5) + SEIR_vals(:,2);
+            c2(2:5) = c2(2:5) + SEIR_vals(:,1);
+            
+            % If negative transition, force that person to go back
+            n1 = find(c1(2:5) < 0);
+            n2 = find(c2(2:5) < 0);
+            if any(n1)
+                val = c1(1+n1);
+                c1(1+n1) = 0;
+                c2(1+n1) = c2(1+n1) + abs(val);
+            end
+            if any(n2)
+                val = c2(1+n2);
+                c2(1+n2) = 0;
+                c1(1+n2) = c1(1+n2) + abs(val);
+            end
+
+            GC.setCells([c1, c2], position);
+
+        end
+        
+        function GC = setCells(GC, cells, position)
+            GC.setValues(position(1,:), cells(2,1), cells(3,1), cells(4,1), cells(5,1), cells(6,1));   
+            GC.setValues(position(2,:), cells(2,2), cells(3,2), cells(4,2), cells(5,2), cells(6,2));
+        end
+       
     end
     
 end
+
+
+
 

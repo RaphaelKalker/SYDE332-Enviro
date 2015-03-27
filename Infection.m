@@ -16,7 +16,7 @@ classdef Infection
     methods (Static)
         function finalVals = getFinalValues(S0, E0, I0, R0)
             [T,Y] = ode45(@solve_SIR, [Infection.t0 Infection.tf], [S0 I0 R0]);
-            Infection.plotODE(T, Y, S0, E0, I0, R0);
+%             Infection.plotODE(T, Y, S0, E0, I0, R0);
             finalVals = [Y(end,1), 0, Y(end,2), Y(end,3)];
         end
         
