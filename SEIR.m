@@ -35,6 +35,20 @@ classdef SEIR
             %In's
             c1(2:5) = c1(2:5) + SEIR_vals(:,2);
             c2(2:5) = c2(2:5) + SEIR_vals(:,1);
+            
+            % If negative transition, force that person to go back
+            n1 = find(c1(2:5) < 0);
+            n2 = find(c2(2:5) < 0);
+            if any(n1)
+                val = c1(1+n1);
+                c1(1+n1) = 0;
+                c2(1+n1) = c2(1+n1) + abs(val);
+            end
+            if any(n2)
+                val = c2(1+n2);
+                c2(1+n2) = 0;
+                c1(1+n2) = c1(1+n2) + abs(val);
+            end
 
             result = [c1, c2];
 
