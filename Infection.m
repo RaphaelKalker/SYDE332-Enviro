@@ -13,6 +13,7 @@ classdef Infection
             [T,Y] = ode45(@solve_SIR, [Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
             Infection.plotODE(T, Y);
             finalVals = [Y(end,1)*POP, Y(end,2)*POP, Y(end,3)*POP, Y(end,4)*POP];
+
         end
         
         function plotODE(T, Y)
