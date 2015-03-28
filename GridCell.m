@@ -24,7 +24,7 @@ classdef GridCell < dynamicprops
         function obj = GridCell(width, height)
             obj.w = width;
             obj.h = height;
-            obj.pt = zeros(width * height, 6);
+            obj.pt = zeros(width, height, 6);
         end
         
         function GC = setValues(GC, coord, Suc, Exposed, Infected, Recovered, flux)
@@ -64,6 +64,22 @@ classdef GridCell < dynamicprops
             Recovered = GC.pt(index + 4*(GC.w * GC.h));
             flux = GC.pt(index + 5*(GC.w * GC.h));
             z = [Pop, Suc, Exposed, Infected, Recovered, flux];
+        end
+        
+        function GC = setupPlot(GC, colorScheme)
+           caxis([1 3])
+           colorbar;
+           colormap(colorScheme);
+        end
+        
+        function GC = drawMap(GC)
+            %Sooooooo, this takes the S,I,R elements (ignore the E for now)
+            %and flattens into single [GridSize, GridSize, 3] matrix. Then
+            %find the maximum S,I, or R value in each grid cell
+            %Put it into a pcolor thing
+            M = cat(3,GC.pt(:,:,2),GC.pt(:,:,3),GC.pt(:,:,5));
+            [Q, INDEX] = max(M, [], 3);
+            pcolor(INDEX);
         end
         
         

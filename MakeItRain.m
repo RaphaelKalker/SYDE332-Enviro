@@ -12,22 +12,22 @@ end
 
 
 %update all of the SIR models with the ODE45 solver
-% for j = 1:GRID.w
-%     for i = 1:GRID.h
-%         
-%         vals = GRID.getValues([i,j]);
-%         A = Infection.getFinalValues(vals(2), vals(3), vals(4), vals(5));
-%         vals(2) = A(1);
-%         vals(3) = A(2);
-%         vals(4) = A(3);
-%         vals(5) = A(4);
-%         GRID.setValues([i,j], vals(2), vals(3), vals(4), vals(5), vals(6));
-%     end
-% end
+for j = 1:GRID.w
+    for i = 1:GRID.h
+        
+        vals = GRID.getValues([i,j]);
+        A = Infection.getFinalValues(vals(1), vals(2), vals(3), vals(4), vals(5));
+        vals(2) = A(1);
+        vals(3) = A(2);
+        vals(4) = A(3);
+        vals(5) = A(4);
+        GRID.setValues([i,j], vals(2), vals(3), vals(4), vals(5), vals(6));
+    end
+end
 
 %single test case
-vals = GRID.getValues([i,j]);
-A = Infection.getFinalValues(vals(1), vals(2), vals(3), vals(4), vals(5));
+% vals = GRID.getValues([i,j]);
+% A = Infection.getFinalValues(vals(1), vals(2), vals(3), vals(4), vals(5));
 
 %Allow Individuals to move around
 for i = 1:GRID.h
@@ -53,3 +53,7 @@ for i = 1:GRID.h
         end
     end
 end
+
+GRID.drawMap();
+GRID.setupPlot(gray);
+
