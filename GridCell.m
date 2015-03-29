@@ -72,14 +72,14 @@ classdef GridCell < dynamicprops
            colormap(colorScheme);
         end
         
-        function GC = drawMap(GC)
+        function handle = drawMap(GC)
             %Sooooooo, this takes the S,I,R elements (ignore the E for now)
             %and flattens into single [GridSize, GridSize, 3] matrix. Then
             %find the maximum S,I, or R value in each grid cell
             %Put it into a pcolor thing
             M = cat(3,GC.pt(:,:,2),GC.pt(:,:,3),GC.pt(:,:,5));
             [Q, INDEX] = max(M, [], 3);
-            pcolor(INDEX);
+            handle = pcolor(INDEX);
         end
         
         

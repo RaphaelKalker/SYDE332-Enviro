@@ -6,18 +6,20 @@ classdef Infection
         E0 = .1;
         t0 = 0;
         tf = 3;
+        tstep = .1;
     end
     
     methods (Static)
         function finalVals = getFinalValues(POP, S0, E0, I0, R0)
             %[T,Y] = ode45(@solve_SIR, [Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
             [T,Y] = forwardEulerSIR([Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
-            Infection.plotODE(T, Y);
+%             Infection.plotODE(T, Y);
             finalVals = [Y(end,1)*POP, Y(end,2)*POP, Y(end,3)*POP, Y(end,4)*POP];
 
         end
         
         function plotODE(T, Y)
+            figure(1);
             plot(T,Y(:,1),T,Y(:,2),T,Y(:,3),T,Y(:,4));
             legend('Susceptible', 'Exposed','Infected','Recovered');
         end
@@ -40,8 +42,8 @@ end
 %just returns final values
 function [T,Y] = forwardEulerSIR(timeParams, IC)
 %forward euler for system at 0.01 timestep
-    timestep = 0.0001;
-    T = (timeParams(1):timestep:timeParams(2))';
+    tstep = Infection.tstep;
+    T = (timeParams(1):tstep:timeParams(2))';
     Y = zeros(length(T),4);
     
     Y(1,1) = IC(1);
@@ -54,10 +56,10 @@ function [T,Y] = forwardEulerSIR(timeParams, IC)
     c = Infection.c;
     
     for i = 2:length(T)
-        Y(i,1) = Y(i - 1,1) + timestep*(-a*Y(i - 1,1)*Y(i - 1,3)); %S' = -bSI
-        Y(i,2) = Y(i - 1,2) + timestep*(a*Y(i - 1,1)*Y(i - 1,3) - c*Y(i - 1,2)); %E' = bSI - cE
-        Y(i,3) = Y(i - 1,3) + timestep*(c*Y(i - 1,2)-b*Y(i - 1,3)); %I' = cE - bI
-        Y(i,4) = Y(i - 1,4) + timestep*(b*Y(i - 1,3)); %R = bI
+        Y(i,1) = Y(i - 1,1) + tstep*(-a*Y(i - 1,1)*Y(i - 1,3)); %S' = -bSI
+        Y(i,2) = Y(i - 1,2) + tstep*(a*Y(i - 1,1)*Y(i - 1,3) - c*Y(i - 1,2)); %E' = bSI - cE
+        Y(i,3) = Y(i - 1,3) + tstep*(c*Y(i - 1,2)-b*Y(i - 1,3)); %I' = cE - bI
+        Y(i,4) = Y(i - 1,4) + tstep*(b*Y(i - 1,3)); %R = bI
     end
     
     Q = [T,Y];
