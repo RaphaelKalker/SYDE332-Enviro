@@ -56,7 +56,8 @@ while(true)
 
     figure(2);
     handle = GRID.drawMap();
-    refreshdata(handle) 
+    refreshdata(handle);
+    pause(0.1);
 end
 
 
