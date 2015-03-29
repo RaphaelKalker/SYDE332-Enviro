@@ -10,9 +10,12 @@ classdef Infection
     
     methods (Static)
         function finalVals = getFinalValues(POP, S0, E0, I0, R0)
-            %[T,Y] = ode45(@solve_SIR, [Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
-            [T,Y] = forwardEulerSIR([Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
+            figure(1);
+            [T,Y] = ode45(@solve_SIR, [Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
             Infection.plotODE(T, Y);
+            figure(2);
+            [T,Y] = forwardEulerSIR([Infection.t0 Infection.tf], [S0/POP E0/POP I0/POP R0/POP]);
+            Infection.plotODE(T, Y);            
             finalVals = [Y(end,1)*POP, Y(end,2)*POP, Y(end,3)*POP, Y(end,4)*POP];
 
         end
@@ -40,7 +43,7 @@ end
 %just returns final values
 function [T,Y] = forwardEulerSIR(timeParams, IC)
 %forward euler for system at 0.01 timestep
-    timestep = 0.0001;
+    timestep = 0.01;
     T = (timeParams(1):timestep:timeParams(2))';
     Y = zeros(length(T),4);
     
