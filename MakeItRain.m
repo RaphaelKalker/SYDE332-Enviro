@@ -12,6 +12,7 @@ end
 
 figure(2);
 GRID.setupPlot(gray);
+hold off;
 
 while(true)
     
@@ -54,10 +55,14 @@ while(true)
         end
     end
 
-    figure(2);
+
+    hold on; %required to not screw up scaling
+%     caxis([1 3]);
     handle = GRID.drawMap();
     refreshdata(handle);
     pause(0.1);
+    caxis([1 3]);
+%     hold off;
 end
 
 
