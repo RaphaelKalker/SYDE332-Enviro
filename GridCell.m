@@ -72,7 +72,7 @@ classdef GridCell < dynamicprops
            colormap(colorScheme);
         end
         
-        function handle = drawMap(GC)
+        function [handle,isSame] = drawMap(GC)
             %Sooooooo, this takes the S,I,R elements (ignore the E for now)
             %and flattens into single [GridSize, GridSize, 3] matrix. Then
             %find the maximum S,I, or R value in each grid cell
@@ -80,6 +80,15 @@ classdef GridCell < dynamicprops
             M = cat(3,GC.pt(:,:,2),GC.pt(:,:,3),GC.pt(:,:,5));
             [Q, INDEX] = max(M, [], 3);
             handle = pcolor(INDEX);
+            
+            %We need to determine when to stop.
+            %So check if INDEX has the same val but not filled with 1's
+            %i.e. keep going if filled with susceptibles
+            isSame = 0;
+            if (max(max(INDEX)) == min(min(INDEX)) && min(min(INDEX)) ~= 1)
+                isSame = 1;
+            end
+            result = [handle, isSame];
         end
         
         

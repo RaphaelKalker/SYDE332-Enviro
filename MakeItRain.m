@@ -55,14 +55,19 @@ while(true)
         end
     end
 
-
-    hold on; %required to not screw up scaling
-%     caxis([1 3]);
-    handle = GRID.drawMap();
+    
+    %required to not screw up scaling
+    hold on;
+    [handle, isSame] = GRID.drawMap();
     refreshdata(handle);
     pause(0.1);
     caxis([1 3]);
-%     hold off;
+    hold off;
+    
+    %Check if condition all recovered has been reached
+    if (isSame)
+        return;
+    end
 end
 
 
