@@ -10,11 +10,24 @@ for j = 1:GRID.w
     end
 end
 
+%Pick a random cell of interest for further investigation
+COI_coord = [1, 1];
+trange = [];
+counter =1;
+
+
 figure(2);
 GRID.setupPlot(gray);
 hold off;
 
 while(true)
+    
+    %Determine cell of interests activity
+    if(counter < 6)
+        COI = GRID.getValues(COI_coord);
+        trange = Infection.appendingODESolver(COI(1), COI(2), COI(3), COI(4), COI(5), trange);
+        counter = counter +1;
+    end
     
     %update all of the SIR models with the forward euler method
     for j = 1:GRID.w
@@ -54,9 +67,12 @@ while(true)
             end
         end
     end
+    
+    
 
     
     %required to not screw up scaling
+    figure(2);
     hold on;
     [handle, isSame] = GRID.drawMap();
     refreshdata(handle);
