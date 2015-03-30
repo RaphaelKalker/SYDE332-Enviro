@@ -32,7 +32,8 @@ classdef GridCell < dynamicprops
             figure(3);
             
             obj.wm = worldmap('World');
-            setm(obj.wm, 'Origin', [0 0 0]);
+            setm(obj.wm, 'Origin', [0 180 0]);
+            setm(obj.wm, 'MapProjection', 'mercator');
             land = shaperead('landareas', 'UseGeoCoords', true);       
                         
             obj.lat = cat(2, land(2).Lat, land(3).Lat, land(5).Lat, land(9).Lat, land(11).Lat, land(22).Lat);
