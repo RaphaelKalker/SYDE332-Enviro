@@ -5,7 +5,7 @@ classdef Infection
         b = .10; %recovery rate
         E0 = .1;
         t0 = 0;
-        tf = 3;
+        tf = 0.5;
         tstep = .1;
     end
     

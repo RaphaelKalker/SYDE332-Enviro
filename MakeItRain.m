@@ -2,11 +2,11 @@ clear vars; clc; close all;
 
 width = 10;
 height = 10;
-GRID = GridCell(width,height);
+GRID = GridCell(1);
 
 for j = 1:GRID.w
     for i = 1:GRID.h
-        GRID.setValues([i,j], 60, 15, 15, 0, 10);
+        GRID.setValues([i,j], 500, 20, 15, 0, 10);
     end
 end
 
@@ -77,7 +77,7 @@ while(true)
     [handle, isSame] = GRID.drawMap();
     refreshdata(handle);
     pause(0.1);
-    caxis([1 3]);
+    caxis([1 4]);
     hold off;
     
     %Check if condition all recovered has been reached
