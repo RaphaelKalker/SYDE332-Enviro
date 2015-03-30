@@ -61,7 +61,7 @@ while(true)
     [handle, isSame] = GRID.drawMap();
     refreshdata(handle);
     pause(0.1);
-    caxis([1 3]);
+    caxis([1 4]);
     hold off;
     
     %Check if condition all recovered has been reached

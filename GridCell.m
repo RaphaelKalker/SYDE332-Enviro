@@ -40,7 +40,7 @@ classdef GridCell < dynamicprops
             obj.long = cat(2, land(2).Lon, land(3).Lon, land(5).Lon, land(9).Lon, land(11).Lon, land(22).Lon);
                         
             % cell per degree
-            [Z, R] = vec2mtx(obj.lat, obj.long, density, [-90 90], [-90 270], 'filled');
+            [Z, R] = vec2mtx(obj.lat, obj.long, density, [-90 90], [-180 180], 'filled');
 
             geoshow(obj.wm, cat(2,land(2), land(3), land(5), land(9), land(11), land(22)), 'Facecolor', [0.7,0.2,0.1]);
             
@@ -101,7 +101,7 @@ classdef GridCell < dynamicprops
         
         function GC = setupPlot(GC, colorScheme)
            figure(2);
-           caxis([1 3])
+           caxis([1 4])
            colorbar;
            colormap(colorScheme);
         end
@@ -114,6 +114,8 @@ classdef GridCell < dynamicprops
             figure(2);
             M = cat(3,GC.pt(:,:,2),GC.pt(:,:,3),GC.pt(:,:,5));
             [Q, INDEX] = max(M, [], 3);
+            ANY = any(M, 3);
+            INDEX = INDEX + ANY;
             handle = pcolor(INDEX);
             
             %We need to determine when to stop.
