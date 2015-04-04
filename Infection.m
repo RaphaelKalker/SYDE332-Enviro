@@ -21,9 +21,23 @@ classdef Infection
         end
         
         function plotODE(T, Y)
-            figure(1);
             plot(T,Y(:,1),T,Y(:,2),T,Y(:,3),T,Y(:,4));
             legend('Susceptible', 'Exposed','Infected','Recovered');
+        end
+        
+        function result = appendingODESolver(POP, S0, E0, I0, R0, trange)
+            if(isempty(trange))
+                trange = [Infection.t0 Infection.tf];
+            else
+                trange = trange + 3;
+            end
+
+            [T,Y] = forwardEulerSIR(trange, [S0/POP E0/POP I0/POP R0/POP]);
+            figure(9);
+            hold on;
+            Infection.plotODE(T, Y)
+            hold off;
+            result = trange;
         end
         
     end
