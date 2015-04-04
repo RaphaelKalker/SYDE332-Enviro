@@ -20,6 +20,7 @@ classdef GridCell < dynamicprops
         mappingCoeff = [];
         
         pt = [];
+        ct = [];
         w = 0;
         h = 0;
     end
@@ -34,17 +35,23 @@ classdef GridCell < dynamicprops
             obj.wm = worldmap('World');
             setm(obj.wm, 'Origin', [0 180 0]);
             setm(obj.wm, 'MapProjection', 'mercator');
-            land = shaperead('landareas', 'UseGeoCoords', true);       
+            land = shaperead('landareas', 'UseGeoCoords', true);
+            cities = shaperead('worldcities', 'UseGeoCoords', true);
                         
             obj.lat = cat(2, land(2).Lat, land(3).Lat, land(5).Lat, land(9).Lat, land(11).Lat, land(22).Lat);
             obj.long = cat(2, land(2).Lon, land(3).Lon, land(5).Lon, land(9).Lon, land(11).Lon, land(22).Lon);
                         
             % cell per degree
             [Z, R] = vec2mtx(obj.lat, obj.long, density, [-90 90], [-180 180], 'filled');
-
+            
+            cityLat = [cities(:).Lat];
+            cityLon = [cities(:).Lon];
+            [citiesLat, citiesLon] = setpostn(Z,R, cityLat, cityLon);
+            
             geoshow(obj.wm, cat(2,land(2), land(3), land(5), land(9), land(11), land(22)), 'Facecolor', [0.7,0.2,0.1]);
             
             obj.pt = repmat(Z,1,1,7);
+            obj.ct = cat(2,citiesLat', citiesLon');
             [obj.h, obj.w] = size(Z);
             obj.mappingCoeff = R;
         end
@@ -129,6 +136,24 @@ classdef GridCell < dynamicprops
             
         end
         
+        function GC = doPlanes(GC)
+            for i = 1:size(GC.ct, 1)
+                currentLat = GC.ct(i,1);
+                currentLon = GC.ct(i,2);
+                currentCity = GC.getValues(GC.ct(i,:));
+                
+                for j = 1:size(GC.ct, 1)
+                    if(i ~= j)
+                        lat = GC.ct(j,1);
+                        lon = GC.ct(j,2);
+                        city = GC.getValues(GC.ct(j,:));
+
+                        GC.swapCells(currentCity', city', [lat,lon;currentLat,currentLon]);  
+                    end
+                end
+                
+            end
+        end        
         
         
         function GC = swapCells(GC, c1,c2, position)

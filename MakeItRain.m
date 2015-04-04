@@ -13,7 +13,7 @@ end
 figure(2);
 GRID.setupPlot(gray);
 hold off;
-
+count = 1;
 while(true)
     
     %update all of the SIR models with the forward euler method
@@ -55,6 +55,7 @@ while(true)
         end
     end
 
+    GRID.doPlanes();
     
     %required to not screw up scaling
     hold on;
@@ -68,6 +69,18 @@ while(true)
     if (isSame)
         return;
     end
+    
+    gcf = figure(2);
+    
+    set(gcf,'units','pixel');
+    set(gcf,'position',[0,0,10000,5000]);
+    set(gcf,'papersize',[10000,5000]);
+    export_fig(gcf,strcat(num2str(count),'.png'));
+    
+    %print('-f2', count, '-dpng');
+    
+    count = count + 1;
+    
 end
 
 
